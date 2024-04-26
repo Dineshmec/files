@@ -1,0 +1,110 @@
+version: '3.8'
+services:
+  authentication:
+    build: ./authentication
+    ports:
+      - "5505:5505"
+    environment:
+      FLASK_APP: authentication.py
+      FLASK_ENV: development
+      DB_HOST: host.docker.internal
+      DB_USER: root
+      DB_PASSWORD: root
+      DB_NAME: oip
+      DB_PORT: 3306
+
+      FLASK_PORT: 5505 # Database for the API service
+    # depends_on:
+    #   - mysql
+
+  display_models:
+    build: ./display_models
+    ports:
+      - "5006:5006"
+    environment:
+      FLASK_APP: display_models.py
+      FLASK_ENV: development
+      DB_HOST: host.docker.internal
+      DB_USER: root
+      DB_PASSWORD: root
+      DB_NAME: models
+      DB_PORT: 3306
+
+      FLASK_PORT: 5006 # Database for the Admin service
+    # depends_on:
+    #   - mysql
+
+  display_schema:
+    build: ./display_schema
+    ports:
+      - "5000:5000"
+    environment:
+      FLASK_APP: display_schema.py
+      FLASK_ENV: development
+      DB_HOST: host.docker.internal
+      DB_USER: root
+      DB_PASSWORD: root
+      # DB_NAME: models
+      DB_PORT: 3306
+      FLASK_PORT: 5000
+      # DB_NAME=user_interface_database  # Database for the User Interface service
+    # depends_on:
+    #   - mysql
+
+
+  insuranceapis_swagger:
+    build: ./insuranceapis_swagger
+    ports:
+      - "5050:5050"
+    environment:
+      FLASK_APP: insuranceapis_swagger.py
+      FLASK_ENV: development
+      DB_HOST: host.docker.internal
+      DB_USER: root
+      DB_PASSWORD: root
+      DB_NAME: techinsurance
+      DB_PORT: 3306
+      FLASK_PORT: 5050  # Database for the User Interface service
+    # depends_on:
+    #   - mysql
+
+
+  display_solution:
+    build: ./display_solution
+    ports:
+      - "5005:5005"
+    environment:
+      FLASK_APP: display_solution.py
+      FLASK_ENV: development
+      DB_HOST: host.docker.internal
+      DB_USER: root
+      DB_PASSWORD: root
+      DB_NAME: oip
+      DB_PORT: 3306
+      FLASK_PORT: 5005 # Database for the User Interface service
+  #   depends_on:
+  #     - mysql
+
+  # mysql:
+  #   image: mysql/mysql-server
+  #   ports:
+  #     - "3306:3306"
+  #   environment:
+  #     MYSQL_ROOT_PASSWORD: rootpassword
+  #     # Ensuring the use of a secure TLS version
+  #     MYSQLD_TLS_VERSION: "TLSv1.2,TLSv1.3"
+  #   # volumes:
+  #   #   - mysql_data:/var/lib/mysql
+  #   #   - ./mysql-init:/docker-entrypoint-initdb.d  # Assumes SQL scripts to create and configure databases
+  #   #   # Mount the host machine's timezone data into the container
+  #   #   - /usr/share/zoneinfo:/usr/share/zoneinfo:ro
+  #   # command: --ssl=1 --ssl-ca=/var/lib/mysql/ca.pem --ssl-cert=/var/lib/mysql/server-cert.pem --ssl-key=/var/lib/mysql/server-key.pem
+  #   # healthcheck:
+  #   #   test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+  #   #   interval: 30s
+  #   #   timeout: 10s
+  #   #   retries: 3
+
+
+volumes:
+  mysql_data:
