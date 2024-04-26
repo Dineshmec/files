@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   authentication:
-    image: dineshwork/cv-speedx:v1  # Replace 'yourusername' with your Docker Hub username
+    image: dineshwork/cv-speedx:s1v1  # Replace 'yourusername' with your Docker Hub username
     ports:
       - "5505:5505"
     environment:
@@ -11,7 +11,7 @@ services:
       DB_HOST: host.docker.internal
       DB_USER: root
       DB_PASSWORD: root
-      DB_NAME: oip
+      DB_NAME: test_db
       DB_PORT: 3306
       FLASK_PORT: 5505
 
@@ -42,6 +42,21 @@ services:
       DB_PORT: 3306
       FLASK_PORT: 5000
 
+
+  display_solution:
+    image: dineshwork/cv-speedx:s4v1
+    ports:
+      - "5005:5005"
+    environment:
+      FLASK_APP: display_solution.py
+      FLASK_ENV: development
+      DB_HOST: host.docker.internal
+      DB_USER: root
+      DB_PASSWORD: root
+      DB_NAME: test_db
+      DB_PORT: 3306
+      FLASK_PORT: 5005
+
   insuranceapis_swagger:
     image: dineshwork/cv-speedx:s5v1
     ports:
@@ -56,16 +71,4 @@ services:
       DB_PORT: 3306
       FLASK_PORT: 5050
 
-  display_solution:
-    image: dineshwork/cv-speedx:s4v1
-    ports:
-      - "5005:5005"
-    environment:
-      FLASK_APP: display_solution.py
-      FLASK_ENV: development
-      DB_HOST: host.docker.internal
-      DB_USER: root
-      DB_PASSWORD: root
-      DB_NAME: oip
-      DB_PORT: 3306
-      FLASK_PORT: 5005
+  
